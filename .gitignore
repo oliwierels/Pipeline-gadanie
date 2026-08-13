@@ -1,0 +1,17 @@
+# Sekrety — NIGDY nie commitować. Repozytorium jest publiczne, a ElevenLabs
+# automatycznie wyłącza klucze wykryte w publicznych repo.
+.env
+.env.local
+.env.*.local
+
+# Zależności
+node_modules/
+
+# Logi
+*.log
+npm-debug.log*
+
+# System / edytor
+.DS_Store
+.vscode/
+.idea/
