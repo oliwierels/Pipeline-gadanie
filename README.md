@@ -75,6 +75,33 @@ debugowania nieaktualnego kodu przez kilka dni.
 Serwer potrzebuje wyjścia na `api.elevenlabs.io`. Przeglądarka łączy się bezpośrednio
 z ElevenLabs/LiveKit (WebRTC).
 
+## Instalacja na telefonie (Android)
+
+Aplikacja jest **PWA** — instaluje się prosto z przeglądarki, bez sklepu, bez konta
+dewelopera i bez pliku APK do rozsyłania.
+
+1. Otwórz adres Railway w **Chrome na telefonie** (musi być HTTPS — Railway daje je sam).
+2. Menu ⋮ → **Zainstaluj aplikację** (albo baner „Dodaj do ekranu głównego").
+3. Gotowe: ikona w launcherze, start na pełnym ekranie, bez paska adresu.
+
+Na Androidzie Chrome nie robi zwykłego skrótu — generuje **WebAPK**, czyli prawdziwy
+pakiet Androida. Aplikacja pojawia się w liście zainstalowanych, ma własne uprawnienia
+(mikrofon zapamiętany na stałe) i własne miejsce w przełączniku zadań.
+
+**Aktualizacje idą same.** Wypychasz zmianę na Railway → telefon podnosi ją przy
+następnym uruchomieniu. Nic nie trzeba przeinstalowywać.
+
+> iOS: instalacja działa (Safari → Udostępnij → Do ekranu początkowego), ale wybór
+> głośnika przez `setSinkId` na iOS nie jest wspierany — wyjście audio wybiera system.
+
+### Kiedy to nie wystarczy
+
+PWA nie ma dostępu do natywnych API Androida. Jeśli kiedyś dojdzie potrzeba
+**blokady ekranu przed usypianiem**, **trybu kiosku** (przypięcie aplikacji) albo
+**sterowania profilem audio Bluetooth z poziomu systemu** — wtedy dopiero warto opakować
+to w **Capacitor** i wydać APK. Dopóki tego nie potrzebujesz, PWA jest prostsze:
+zero toolchainu, zero podpisywania, zero przebudowy przy każdej zmianie.
+
 ## Diagnostyka
 
 Zacznij zawsze tutaj — endpoint mówi wprost, co jest źle, bez grzebania w logach:
@@ -121,7 +148,13 @@ Kody błędów z `/api/webrtc-token`:
 ├── package.json      # Skrypty i zależności
 ├── .env.example      # Wzór konfiguracji
 └── public/
-    ├── index.html    # UI
-    ├── styles.css    # Style
-    └── app.js        # WebRTC, wybór urządzeń, tryby mikrofonu, mierniki
+    ├── index.html            # UI
+    ├── styles.css            # Style
+    ├── app.js                # WebRTC, wybór urządzeń, tryby mikrofonu, mierniki
+    ├── manifest.webmanifest  # PWA: nazwa, ikony, tryb standalone
+    ├── sw.js                 # Service worker (pomija /api/, cache'uje shell)
+    └── icons/                # Ikony launchera (zwykłe + maskable)
 ```
+
+> Po zmianie plików w `public/` podbij `VERSION` w `sw.js` — inaczej telefony mogą
+> jeszcze przez chwilę serwować statyki ze starego cache.
