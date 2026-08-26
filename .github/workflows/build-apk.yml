@@ -96,4 +96,4 @@ jobs:
             --notes "Zbudowano z commita ${GITHUB_SHA::7}.
 
           Pobierz na telefon i zainstaluj (trzeba zezwolić na instalację z nieznanych źródeł).
-          Aplikacja ładuje interfejs z adresu skonfigurowanego w capacitor.config.json."
+          Interfejs jest wbudowany w pakiet; z sieci pobierany jest tylko token sesji."
