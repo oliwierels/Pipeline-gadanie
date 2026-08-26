@@ -9,7 +9,9 @@
   "scripts": {
     "start": "node server.js",
     "build": "echo \"No build step needed — static frontend is served from public/\"",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "copy:sdk": "node scripts/copy-sdk.mjs",
+    "sync:android": "npm run copy:sdk && cap sync android"
   },
   "keywords": [
     "elevenlabs",

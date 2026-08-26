@@ -66,8 +66,10 @@ jobs:
           fi
           echo "Backend: $(grep -o 'window.__BACKEND_URL__ = \"[^\"]*\"' public/index.html)"
 
+      # `sync:android` kopiuje najpierw bundle SDK do public/vendor — bez tego
+      # aplikacja natywna nie ma czego wczytać i rozmowa nie wystartuje.
       - name: Synchronizacja Capacitora
-        run: npx cap sync android
+        run: npm run sync:android
 
       - name: Budowa APK
         working-directory: android

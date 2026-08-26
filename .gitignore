@@ -15,3 +15,6 @@ npm-debug.log*
 .DS_Store
 .vscode/
 .idea/
+
+# Kopia bundla SDK z node_modules (tworzona przez npm run copy:sdk)
+public/vendor/
