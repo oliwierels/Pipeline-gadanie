@@ -94,7 +94,46 @@ następnym uruchomieniu. Nic nie trzeba przeinstalowywać.
 > iOS: instalacja działa (Safari → Udostępnij → Do ekranu początkowego), ale wybór
 > głośnika przez `setSinkId` na iOS nie jest wspierany — wyjście audio wybiera system.
 
-### Kiedy to nie wystarczy
+## Aplikacja natywna (APK)
+
+Poza PWA repozytorium buduje **prawdziwy pakiet Androida** (`pl.bots33.cashibot`)
+przez Capacitor. Aplikacja ładuje interfejs z Railway, więc telefon klienta dalej
+podnosi aktualizacje zdalnie — bez przeinstalowywania.
+
+### Pobranie
+
+Stały link do najnowszej wersji, można otworzyć wprost na telefonie:
+
+```
+https://github.com/oliwierels/Pipeline-gadanie/releases/latest/download/cashibot.apk
+```
+
+Plik powstaje automatycznie przy każdym pushu na `main` (Actions → **Build APK**).
+Można go też zbudować ręcznie: Actions → Build APK → **Run workflow**.
+
+### Instalacja na telefonie
+
+1. Otwórz link powyżej w przeglądarce na telefonie — plik się pobierze.
+2. Dotknij pobranego pliku. Android zapyta o zgodę na instalację z nieznanych
+   źródeł — zezwól (to jednorazowe, dotyczy przeglądarki, z której pobierasz).
+3. Zainstaluj, uruchom, **zezwól na mikrofon** przy pierwszym starcie.
+
+### Zmiana adresu serwera
+
+Adres, spod którego aplikacja ładuje interfejs, siedzi w `capacitor.config.json`.
+Można go nadpisać **bez dotykania kodu**:
+
+**Settings → Secrets and variables → Actions → Variables → New variable**
+- nazwa: `APP_URL`
+- wartość: `https://twoj-adres.up.railway.app`
+
+Potem Actions → Build APK → **Run workflow**. Nowy plik pojawi się pod tym samym linkiem.
+
+> Build jest w wariancie *debug* — instaluje się bez problemu z pliku, ale nie nadaje
+> się do publikacji w Google Play. Do sklepu potrzebny byłby wariant *release*
+> podpisany własnym keystore.
+
+### Kiedy PWA nie wystarczy
 
 PWA nie ma dostępu do natywnych API Androida. Jeśli kiedyś dojdzie potrzeba
 **blokady ekranu przed usypianiem**, **trybu kiosku** (przypięcie aplikacji) albo
