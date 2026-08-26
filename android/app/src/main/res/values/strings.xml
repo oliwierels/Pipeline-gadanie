@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">CashiBot</string>
+    <string name="title_activity_main">CashiBot</string>
+    <string name="package_name">pl.bots33.cashibot</string>
+    <string name="custom_url_scheme">pl.bots33.cashibot</string>
+</resources>

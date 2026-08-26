@@ -1,0 +1,88 @@
+name: Build APK
+
+# Buduje plik .apk i publikuje go jako Release, żeby dało się go pobrać
+# bezpośrednio na telefonie (artefakty Actions schodzą jako .zip, co na
+# Androidzie jest niewygodne).
+#
+# Stały link do najnowszej wersji:
+#   https://github.com/oliwierels/Pipeline-gadanie/releases/latest/download/cashibot.apk
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "README.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Instalacja zależności
+        run: npm ci
+
+      # Adres, spod którego aplikacja ładuje interfejs. Domyślnie bierze się
+      # z capacitor.config.json, ale można go nadpisać BEZ ZMIANY KODU:
+      # Settings → Secrets and variables → Actions → Variables → APP_URL
+      # Po zmianie odpal workflow ponownie (Actions → Build APK → Run workflow).
+      - name: Ustaw adres aplikacji
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+        run: |
+          if [ -n "$APP_URL" ]; then
+            node -e '
+              const fs = require("fs");
+              const cfg = JSON.parse(fs.readFileSync("capacitor.config.json", "utf8"));
+              cfg.server.url = process.env.APP_URL;
+              fs.writeFileSync("capacitor.config.json", JSON.stringify(cfg, null, 2));
+            '
+          fi
+          echo "Aplikacja będzie ładować interfejs z: $(node -p 'require("./capacitor.config.json").server.url')"
+
+      - name: Synchronizacja Capacitora
+        run: npx cap sync android
+
+      - name: Budowa APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Zmiana nazwy pliku
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk cashibot.apk
+
+      # Zapas — plik dostępny też z poziomu zakładki Actions.
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cashibot-apk
+          path: cashibot.apk
+          if-no-files-found: error
+
+      - name: Publikacja jako Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Jeden, stale nadpisywany release — link do pobrania się nie zmienia.
+          gh release delete apk-latest --yes --cleanup-tag 2>/dev/null || true
+          gh release create apk-latest cashibot.apk \
+            --title "CashiBot — najnowszy APK" \
+            --notes "Zbudowano z commita ${GITHUB_SHA::7}.
+
+          Pobierz na telefon i zainstaluj (trzeba zezwolić na instalację z nieznanych źródeł).
+          Aplikacja ładuje interfejs z adresu skonfigurowanego w capacitor.config.json."

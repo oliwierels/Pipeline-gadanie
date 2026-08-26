@@ -1,0 +1,13 @@
+{
+  "appId": "pl.bots33.cashibot",
+  "appName": "CashiBot",
+  "webDir": "public",
+  "android": {
+    "allowMixedContent": false
+  },
+  "server": {
+    "url": "https://benio-x-loza-production.up.railway.app",
+    "cleartext": false,
+    "androidScheme": "https"
+  }
+}

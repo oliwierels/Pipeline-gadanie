@@ -20,10 +20,15 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@capacitor/android": "^8.5.0",
+    "@capacitor/core": "^8.5.0",
     "@elevenlabs/client": "^1.11.1",
     "@elevenlabs/elevenlabs-js": "^2.53.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.0"
   }
 }
