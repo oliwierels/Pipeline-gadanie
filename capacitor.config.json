@@ -1,6 +1,6 @@
 {
-  "appId": "pl.bots33.cashibot",
-  "appName": "CashiBot",
+  "appId": "pl.bots33.robot",
+  "appName": "Robot 33bots",
   "webDir": "public",
   "android": {
     "allowMixedContent": false

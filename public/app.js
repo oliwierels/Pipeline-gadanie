@@ -1,5 +1,5 @@
 /**
- * CashiBot — logika frontendu (Conversational AI, ElevenLabs WebRTC).
+ * Robot 33bots — logika frontendu (Conversational AI, ElevenLabs WebRTC).
  *
  * Założenia anty‑sprzężeniowe:
  *  - getUserMedia / track mikrofonu jest tworzony przez SDK z wymuszonymi flagami

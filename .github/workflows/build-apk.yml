@@ -5,7 +5,7 @@ name: Build APK
 # Androidzie jest niewygodne).
 #
 # Stały link do najnowszej wersji:
-#   https://github.com/oliwierels/Pipeline-gadanie/releases/latest/download/cashibot.apk
+#   https://github.com/oliwierels/Pipeline-gadanie/releases/latest/download/robot-33bots.apk
 
 on:
   push:
@@ -66,13 +66,13 @@ jobs:
           ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Zmiana nazwy pliku
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk cashibot.apk
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk robot-33bots.apk
 
       # Zapas — plik dostępny też z poziomu zakładki Actions.
       - uses: actions/upload-artifact@v4
         with:
-          name: cashibot-apk
-          path: cashibot.apk
+          name: robot-33bots-apk
+          path: robot-33bots.apk
           if-no-files-found: error
 
       - name: Publikacja jako Release
@@ -81,8 +81,8 @@ jobs:
         run: |
           # Jeden, stale nadpisywany release — link do pobrania się nie zmienia.
           gh release delete apk-latest --yes --cleanup-tag 2>/dev/null || true
-          gh release create apk-latest cashibot.apk \
-            --title "CashiBot — najnowszy APK" \
+          gh release create apk-latest robot-33bots.apk \
+            --title "Robot 33bots — najnowszy APK" \
             --notes "Zbudowano z commita ${GITHUB_SHA::7}.
 
           Pobierz na telefon i zainstaluj (trzeba zezwolić na instalację z nieznanych źródeł).

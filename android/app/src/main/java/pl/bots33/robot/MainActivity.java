@@ -1,4 +1,4 @@
-package pl.bots33.cashibot;
+package pl.bots33.robot;
 
 import com.getcapacitor.BridgeActivity;
 

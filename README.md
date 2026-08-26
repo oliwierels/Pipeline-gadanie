@@ -96,7 +96,7 @@ następnym uruchomieniu. Nic nie trzeba przeinstalowywać.
 
 ## Aplikacja natywna (APK)
 
-Poza PWA repozytorium buduje **prawdziwy pakiet Androida** (`pl.bots33.cashibot`)
+Poza PWA repozytorium buduje **prawdziwy pakiet Androida** (`pl.bots33.robot`)
 przez Capacitor. Aplikacja ładuje interfejs z Railway, więc telefon klienta dalej
 podnosi aktualizacje zdalnie — bez przeinstalowywania.
 
@@ -105,7 +105,7 @@ podnosi aktualizacje zdalnie — bez przeinstalowywania.
 Stały link do najnowszej wersji, można otworzyć wprost na telefonie:
 
 ```
-https://github.com/oliwierels/Pipeline-gadanie/releases/latest/download/cashibot.apk
+https://github.com/oliwierels/Pipeline-gadanie/releases/latest/download/robot-33bots.apk
 ```
 
 Plik powstaje automatycznie przy każdym pushu na `main` (Actions → **Build APK**).
