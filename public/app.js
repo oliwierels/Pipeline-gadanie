@@ -67,6 +67,23 @@ let meterRAF = 0;
 
 // --- Pomocnicze -------------------------------------------------------------
 
+/**
+ * Adres backendu dla wywołań `/api/*`.
+ *
+ * W wersji webowej strona jest serwowana przez ten sam serwer, który wystawia API,
+ * więc poprawna (i jedyna potrzebna) jest ścieżka względna — zwracamy pusty prefiks.
+ *
+ * W aplikacji natywnej interfejs leży w pakiecie, pod origin `https://localhost`.
+ * Ścieżka względna trafiłaby wtedy w lokalne zasoby zamiast w backend, dlatego
+ * doklejamy pełny adres wstrzyknięty w `index.html` (podmieniany przy budowie APK).
+ */
+function apiBase() {
+  const native =
+    window.Capacitor?.isNativePlatform?.() === true ||
+    (location.protocol === "https:" && location.hostname === "localhost");
+  return native ? window.__BACKEND_URL__ || "" : "";
+}
+
 function setStatus(text, kind = "") {
   statusText.textContent = text;
   statusPill.className = "pill" + (kind ? " " + kind : "");
@@ -237,7 +254,7 @@ async function start() {
 
   try {
     // 1) Pobierz krótkożyciowy token sesji WebRTC z backendu (klucz API zostaje na serwerze).
-    const res = await fetch("/api/webrtc-token", { cache: "no-store" });
+    const res = await fetch(`${apiBase()}/api/webrtc-token`, { cache: "no-store" });
     if (!res.ok) {
       const e = await res.json().catch(() => ({}));
       throw new Error(e.error || `HTTP ${res.status}`);

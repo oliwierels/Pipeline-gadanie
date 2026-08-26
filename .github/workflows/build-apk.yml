@@ -38,23 +38,33 @@ jobs:
       - name: Instalacja zależności
         run: npm ci
 
-      # Adres, spod którego aplikacja ładuje interfejs. Domyślnie bierze się
-      # z capacitor.config.json, ale można go nadpisać BEZ ZMIANY KODU:
+      # Interfejs jest wbudowany w APK, więc z sieci pobierany jest już tylko
+      # token sesji (/api/*). Adres backendu wstrzykujemy do index.html.
+      # Można go nadpisać BEZ ZMIANY KODU:
       # Settings → Secrets and variables → Actions → Variables → APP_URL
       # Po zmianie odpal workflow ponownie (Actions → Build APK → Run workflow).
-      - name: Ustaw adres aplikacji
+      - name: Ustaw adres backendu
         env:
           APP_URL: ${{ vars.APP_URL }}
         run: |
           if [ -n "$APP_URL" ]; then
             node -e '
               const fs = require("fs");
-              const cfg = JSON.parse(fs.readFileSync("capacitor.config.json", "utf8"));
-              cfg.server.url = process.env.APP_URL;
-              fs.writeFileSync("capacitor.config.json", JSON.stringify(cfg, null, 2));
+              const file = "public/index.html";
+              const html = fs.readFileSync(file, "utf8");
+              const url = process.env.APP_URL.replace(/\/+$/, "");
+              const next = html.replace(
+                /window\.__BACKEND_URL__ = "[^"]*";/,
+                `window.__BACKEND_URL__ = "${url}";`
+              );
+              if (next === html) {
+                console.error("Nie znalazłem znacznika __BACKEND_URL__ w index.html");
+                process.exit(1);
+              }
+              fs.writeFileSync(file, next);
             '
           fi
-          echo "Aplikacja będzie ładować interfejs z: $(node -p 'require("./capacitor.config.json").server.url')"
+          echo "Backend: $(grep -o 'window.__BACKEND_URL__ = \"[^\"]*\"' public/index.html)"
 
       - name: Synchronizacja Capacitora
         run: npx cap sync android

@@ -6,8 +6,6 @@
     "allowMixedContent": false
   },
   "server": {
-    "url": "https://benio-x-loza-production.up.railway.app",
-    "cleartext": false,
     "androidScheme": "https"
   }
 }

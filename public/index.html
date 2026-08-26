@@ -16,6 +16,16 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Robot 33bots" />
 
+  <!--
+    Adres backendu dla wersji natywnej (APK), gdzie interfejs leży w pakiecie
+    i ścieżki względne nie trafiają w serwer. W wersji webowej ta wartość jest
+    ignorowana — patrz `apiBase()` w app.js.
+    Podmieniane przy budowie APK na podstawie zmiennej APP_URL (workflow "Build APK").
+  -->
+  <script>
+    window.__BACKEND_URL__ = "https://benio-x-loza-production.up.railway.app";
+  </script>
+
   <link rel="stylesheet" href="/styles.css" />
 
   <!--
@@ -65,7 +75,11 @@
   <!-- Rejestracja service workera. Bez niego Chrome nie zaproponuje instalacji.
        Rejestrujemy po `load`, żeby nie konkurować o pasmo ze startem aplikacji. -->
   <script>
-    if ("serviceWorker" in navigator) {
+    // Tylko w przeglądarce. W aplikacji natywnej pliki są już w pakiecie,
+    // więc cache'owanie ich drugi raz nic nie daje, a komplikuje aktualizacje.
+    var isNative = !!(window.Capacitor && window.Capacitor.isNativePlatform &&
+                      window.Capacitor.isNativePlatform());
+    if (!isNative && "serviceWorker" in navigator) {
       window.addEventListener("load", function () {
         navigator.serviceWorker.register("/sw.js").catch(function (err) {
           console.warn("Rejestracja service workera nie powiodła się:", err);

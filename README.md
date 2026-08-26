@@ -97,8 +97,15 @@ następnym uruchomieniu. Nic nie trzeba przeinstalowywać.
 ## Aplikacja natywna (APK)
 
 Poza PWA repozytorium buduje **prawdziwy pakiet Androida** (`pl.bots33.robot`)
-przez Capacitor. Aplikacja ładuje interfejs z Railway, więc telefon klienta dalej
-podnosi aktualizacje zdalnie — bez przeinstalowywania.
+przez Capacitor.
+
+**Interfejs jest wbudowany w APK.** Z sieci pobierany jest wyłącznie krótkożyciowy
+token sesji (`/api/webrtc-token`). Ma to dwie konsekwencje:
+
+- ✅ wygląd i nazwa aplikacji **nie zależą od tego, co akurat serwuje Railway** —
+  telefon klienta pokazuje dokładnie to, co zostało zbudowane
+- ⚠️ zmiana w interfejsie wymaga **nowego APK i przeinstalowania**; sam redeploy
+  na Railway już nie wystarcza (backend aktualizuje się normalnie)
 
 ### Pobranie
 
@@ -118,10 +125,10 @@ Można go też zbudować ręcznie: Actions → Build APK → **Run workflow**.
    źródeł — zezwól (to jednorazowe, dotyczy przeglądarki, z której pobierasz).
 3. Zainstaluj, uruchom, **zezwól na mikrofon** przy pierwszym starcie.
 
-### Zmiana adresu serwera
+### Zmiana adresu backendu
 
-Adres, spod którego aplikacja ładuje interfejs, siedzi w `capacitor.config.json`.
-Można go nadpisać **bez dotykania kodu**:
+Adres, pod który aplikacja natywna wysyła żądania o token, siedzi w `public/index.html`
+(`window.__BACKEND_URL__`). Można go nadpisać **bez dotykania kodu**:
 
 **Settings → Secrets and variables → Actions → Variables → New variable**
 - nazwa: `APP_URL`
