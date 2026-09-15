@@ -11,7 +11,7 @@
  * Po zmianie plików w `public/` podbij VERSION — to unieważnia stary cache.
  */
 
-const VERSION = "v1";
+const VERSION = "v2";
 const CACHE = `pipeline-gadanie-${VERSION}`;
 
 const SHELL = [
